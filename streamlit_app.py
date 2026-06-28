@@ -399,8 +399,15 @@ with tabs[0]:
                 explainer = shap.Explainer(tabular_model)
                 shap_vals = explainer(input_vector)
                 st.session_state.shap_values = shap_vals
-            except Exception as se:
-                st.warning(f"Could not compute SHAP values: {se}")
+            except Exception as e1:
+                print(f"[SHAP ERROR] shap.Explainer failed: {e1}")
+                try:
+                    explainer = shap.TreeExplainer(tabular_model)
+                    shap_vals = explainer(input_vector)
+                    st.session_state.shap_values = shap_vals
+                    print("[SHAP] Successfully calculated using TreeExplainer fallback.")
+                except Exception as e2:
+                    print(f"[SHAP ERROR] shap.TreeExplainer fallback failed: {e2}")
                 
             # Evaluate logic gate
             st.session_state.triage_activated = evaluate_logic_gate(
