@@ -1,17 +1,18 @@
-\documentclass[9pt,journal,onecolumn]{IEEEtran}
+\documentclass[10pt]{article}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{hyperref}
-\usepackage[margin=0.42in]{geometry} % Ultra-tight margins for single-page format
+\usepackage[margin=0.48in]{geometry} % Tight margins to keep it on one page in single-column
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning}
 
 \begin{document}
 
-\title{Multi-Fold Multimodal Fusion for Enhanced Cardiovascular Risk Stratification}
+\title{\large \textbf{Multi-Fold Multimodal Fusion for Enhanced Cardiovascular Risk Stratification}}
 \author{Riya Moorjani --- \textit{Precision Clinical Technologies} --- \href{mailto:riyamoorjani2504@gmail.com}{riyamoorjani2504@gmail.com}}
+\date{}
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
@@ -29,10 +30,10 @@ The workstation operates as a sequential decision gateway. Vitals are scanned in
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[
-    node distance=0.7cm and 0.9cm,
-    box/.style={draw, rectangle, rounded corners=3pt, fill=blue!5, text width=2.9cm, align=center, minimum height=0.55cm, font=\scriptsize},
-    decision/.style={draw, diamond, aspect=2.2, fill=yellow!10, text width=1.4cm, align=center, font=\scriptsize},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105, fill=green!10, text width=2.1cm, align=center, font=\scriptsize},
+    node distance=0.7cm and 1.2cm,
+    box/.style={draw, rectangle, rounded corners=3pt, fill=blue!5, text width=3.4cm, align=center, minimum height=0.6cm, font=\scriptsize},
+    decision/.style={draw, diamond, aspect=2.2, fill=yellow!10, text width=1.5cm, align=center, font=\scriptsize},
+    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105, fill=green!10, text width=2.4cm, align=center, font=\scriptsize},
     arrow/.style={thick, ->, >=stealth}
 ]
     % Main Triage Column
@@ -44,8 +45,8 @@ The workstation operates as a sequential decision gateway. Vitals are scanned in
     
     % Fold 2 Sub-models (Horizontal Row)
     \node (cxr) [box, below=of engage, yshift=-0.15cm] {\textbf{Chest X-Ray (CXR)}\\DenseNet-121 Classifier};
-    \node (ecg) [box, left=of cxr, xshift=-0.15cm] {\textbf{12-Lead ECG}\\1D ResNet Classifier};
-    \node (echo) [box, right=of cxr, xshift=0.15cm] {\textbf{Echo-Analysis}\\CNN-LSTM Video Classifier};
+    \node (ecg) [box, left=of cxr, xshift=-0.2cm] {\textbf{12-Lead ECG}\\1D ResNet Classifier};
+    \node (echo) [box, right=of cxr, xshift=0.2cm] {\textbf{Echo-Analysis}\\CNN-LSTM Video Classifier};
     
     % Fusion & Final Output
     \node (fusion) [box, below=of cxr, yshift=-0.15cm] {\textbf{Late Fusion Adapter}\\Concatenated 110D Vector};
@@ -58,18 +59,18 @@ The workstation operates as a sequential decision gateway. Vitals are scanned in
     \draw [arrow] (gate) -- node[anchor=east] {Yes} (engage);
     
     % Branching to Fold 2
-    \draw [arrow] (engage.south) -- ++(0,-0.25) -| (ecg.north);
+    \draw [arrow] (engage.south) -- ++(0,-0.28) -| (ecg.north);
     \draw [arrow] (engage.south) -- (cxr.north);
-    \draw [arrow] (engage.south) -- ++(0,-0.25) -| (echo.north);
+    \draw [arrow] (engage.south) -- ++(0,-0.28) -| (echo.north);
     
     % Merging to Fusion
-    \draw [arrow] (ecg.south) -- ++(0,-0.25) -| (fusion.north);
+    \draw [arrow] (ecg.south) -- ++(0,-0.28) -| (fusion.north);
     \draw [arrow] (cxr.south) -- (fusion.north);
-    \draw [arrow] (echo.south) -- ++(0,-0.25) -| (fusion.north);
+    \draw [arrow] (echo.south) -- ++(0,-0.28) -| (fusion.north);
     
     \draw [arrow] (fusion) -- (archive);
 \end{tikzpicture}
-\caption{Schematic of the Multi-Fold Multimodal Fusion Workstation Gateway.}
+\caption{Flowchart of the sequential triage gateway with horizontal modality branching.}
 \label{fig:flowchart}
 \end{figure}
 
@@ -80,6 +81,7 @@ We evaluated the diagnostic performance on a validation dataset of cardiology pa
 \centering
 \caption{Performance Comparison: Tabular XGBoost vs. Multimodal Fusion Workstation}
 \label{tab:metrics}
+\vspace{0.05in}
 \begin{tabular}{lccc}
 \toprule
 \textbf{Evaluation Metric} & \textbf{XGBoost (Tabular Only)} & \textbf{Multimodal Fusion Engine} & \textbf{Absolute Improvement} \\

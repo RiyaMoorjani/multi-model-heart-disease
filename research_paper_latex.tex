@@ -1,40 +1,40 @@
-\documentclass[10pt,conference,letterpaper]{IEEEtran}
+\documentclass[11pt,onecolumn]{article}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage[margin=1.0in]{geometry} % Standard margins for single-column format
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning, calc}
 
 % Define TikZ styles for flowcharts and neural nets
-\tikzstyle{box} = [draw, rectangle, rounded corners=3pt, fill=blue!5, text width=2.4cm, align=center, minimum height=0.6cm, font=\scriptsize]
-\tikzstyle{decision} = [draw, diamond, aspect=2, fill=yellow!10, text width=1.3cm, align=center, font=\scriptsize]
-\tikzstyle{io} = [draw, trapezium, trapezium left angle=75, trapezium right angle=105, fill=green!10, text width=1.8cm, align=center, font=\scriptsize]
+\tikzstyle{box} = [draw, rectangle, rounded corners=3pt, fill=blue!5, text width=3.5cm, align=center, minimum height=0.7cm, font=\small]
+\tikzstyle{decision} = [draw, diamond, aspect=2.2, fill=yellow!10, text width=1.6cm, align=center, font=\small]
+\tikzstyle{io} = [draw, trapezium, trapezium left angle=75, trapezium right angle=105, fill=green!10, text width=2.4cm, align=center, font=\small]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 \begin{document}
 
-\title{Multi-Fold Multimodal Fusion for Enhanced Cardiovascular Risk Stratification: A Secure Clinical Workstation Approach}
+\title{\Large \textbf{Multi-Fold Multimodal Fusion for Enhanced Cardiovascular Risk Stratification: A Secure Clinical Workstation Approach}}
 
-\author{\IEEEauthorblockN{Riya Moorjani}
-\IEEEauthorblockA{\textit{Department of Clinical AI} \\
-\textit{Precision Clinical Technologies}\\
-Email: riyamoorjani2504@gmail.com}
+\author{
+  \textbf{Riya Moorjani} \\
+  \textit{Department of Clinical AI} \\
+  \textit{Precision Clinical Technologies} \\
+  Email: \href{mailto:riyamoorjani2504@gmail.com}{riyamoorjani2504@gmail.com}
 }
-
+\date{}
 \maketitle
 
 \begin{abstract}
 Cardiovascular Diseases (CVD) remain the leading cause of global mortality. While classical machine learning algorithms, such as XGBoost, show promise in predicting baseline cardiovascular risk using structured electronic health records (EHR), they are fundamentally limited by their single-modal nature. These models remain blind to acute electrical changes, structural lung/heart anomalies, qualitative clinical narratives, and echocardiogram motion dynamics. This paper introduces a secure, multi-fold clinical workstation that integrates tabular features, 12-lead electrocardiograms (ECG), chest radiographs (CXR), echocardiogram video streams (Echo-analysis), and unstructured clinical notes. By utilizing a late-fusion neural adapter, the workstation achieves a classification accuracy of 92.1\%, representing a +13.7\% absolute improvement over the single-modal XGBoost baseline (78.4\%). We present the underlying mathematical frameworks, an ablation study of the individual modalities, and detail the AES-256 cryptographic pipeline implemented to guarantee HIPAA compliance.
 \end{abstract}
 
-\begin{IEEEkeywords}
-Multimodal Machine Learning, Cardiovascular Disease, Late Fusion, Echocardiography, Medical Image Processing, Cryptosecurity, LaTeX Template.
-\end{IEEEkeywords}
+\vspace{0.2in}
 
 \section{Introduction}
-\IEEEdesktopusefirstcol{C}ardiovascular Diseases (CVD) present a significant diagnostic challenge due to their complex, multi-system etiology. Chronic conditions such as coronary artery disease, valvular dysfunctions, and myocardial infarctions manifest across diverse physiological dimensions. In modern clinical settings, a comprehensive cardiovascular workup generates highly heterogeneous data streams, including demographic tables, biochemical panels, time-series signals (electrocardiograms), structural imaging (chest radiographs), dynamic ultrasound videos (echocardiograms), and free-text physician narratives.
+Cardiovascular Diseases (CVD) present a significant diagnostic challenge due to their complex, multi-system etiology. Chronic conditions such as coronary artery disease, valvular dysfunctions, and myocardial infarctions manifest across diverse physiological dimensions. In modern clinical settings, a comprehensive cardiovascular workup generates highly heterogeneous data streams, including demographic tables, biochemical panels, time-series signals (electrocardiograms), structural imaging (chest radiographs), dynamic ultrasound videos (echocardiograms), and free-text physician narratives.
 
 Despite the richness of these diagnostic streams, contemporary clinical decision support systems (CDSS) are predominantly single-modal. They typically evaluate structured electronic health record (EHR) features (e.g., blood pressure, blood glucose, cholesterol levels) using classical classification models like logistic regression or gradient-boosted decision trees (XGBoost). While computationally efficient, these single-modal baseline systems suffer from severe limitations:
 \begin{itemize}
@@ -57,18 +57,18 @@ The system layout operates in a two-stage sequential gating process. The logical
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[node distance=1.1cm, auto]
+\begin{tikzpicture}[node distance=1.3cm, auto]
     % Nodes
     \node (pres) [box] {Patient Presentation};
     \node (fold1) [box, below of=pres] {Fold 1: XGBoost Tabular Triage};
     \node (gate) [decision, below of=fold1, yshift=-0.2cm] {Risk $\ge 15\%$?};
-    \node (discharge) [io, right of=gate, xshift=1.8cm] {Standard Discharge / Observation};
-    \node (engage) [box, below of=gate, yshift=-0.4cm] {Engage Fold 2 Gate};
+    \node (discharge) [io, right of=gate, xshift=2.8cm] {Standard Discharge / Observation};
+    \node (engage) [box, below of=gate, yshift=-0.5cm] {Engage Fold 2 Gate};
     
     % Modality branch indicator
-    \node (models) [box, below of=engage, fill=blue!10] {Deep Feature Classifiers (ECG, CXR, Echo, Notes)};
+    \node (models) [box, below of=engage, fill=blue!10] {Deep Feature Classifiers \\ (ECG, CXR, Echo, Notes)};
     \node (fusion) [box, below of=models] {Late Fusion Adapter};
-    \node (output) [box, below of=fusion] {Encrypted SQLite Audit Archive (AES-256)};
+    \node (output) [box, below of=fusion] {Encrypted SQLite Archive (AES-256)};
 
     % Arrows
     \draw [arrow] (pres) -- (fold1);
@@ -107,27 +107,27 @@ The late fusion adapter concatenates the outputs of the primary classifiers. The
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[node distance=0.8cm, auto]
+\begin{tikzpicture}[node distance=1.0cm, auto]
     % Modality Vectors
-    \node (tab) [draw, rectangle, fill=red!10, minimum width=1.1cm] {\scriptsize $T$};
-    \node (ecg) [draw, rectangle, fill=orange!10, right of=tab, xshift=0.5cm, minimum width=1.1cm] {\scriptsize $E$};
-    \node (cxr) [draw, rectangle, fill=yellow!10, right of=ecg, xshift=0.5cm, minimum width=1.1cm] {\scriptsize $X$};
-    \node (echo) [draw, rectangle, fill=purple!10, right of=cxr, xshift=0.5cm, minimum width=1.1cm] {\scriptsize $V_{\text{echo}}$};
-    \node (nlp) [draw, rectangle, fill=green!10, right of=echo, xshift=0.5cm, minimum width=1.1cm] {\scriptsize $N$};
+    \node (tab) [draw, rectangle, fill=red!10, minimum width=1.5cm, minimum height=0.6cm] {\small $T$};
+    \node (ecg) [draw, rectangle, fill=orange!10, right of=tab, xshift=1.0cm, minimum width=1.5cm, minimum height=0.6cm] {\small $E$};
+    \node (cxr) [draw, rectangle, fill=yellow!10, right of=ecg, xshift=1.0cm, minimum width=1.5cm, minimum height=0.6cm] {\small $X$};
+    \node (echo) [draw, rectangle, fill=purple!10, right of=cxr, xshift=1.0cm, minimum width=1.5cm, minimum height=0.6cm] {\small $V_{\text{echo}}$};
+    \node (nlp) [draw, rectangle, fill=green!10, right of=echo, xshift=1.0cm, minimum width=1.5cm, minimum height=0.6cm] {\small $N$};
 
     % Concatenated Vector
-    \node (concat) [draw, rectangle, fill=blue!10, below of=cxr, yshift=-0.5cm, minimum width=6.5cm, minimum height=0.4cm] {\scriptsize Fused Vector $F \in \mathbb{R}^{110}$};
+    \node (concat) [draw, rectangle, fill=blue!10, below of=cxr, yshift=-0.6cm, minimum width=9.0cm, minimum height=0.5cm] {\small Fused Vector $F \in \mathbb{R}^{110}$};
 
     % Adapter Head
-    \node (fc1) [draw, rectangle, fill=blue!20, below of=concat, yshift=-0.2cm, minimum width=4.5cm] {\scriptsize Fully Connected Layer (ReLU)};
-    \node (output) [draw, rectangle, fill=red!20, below of=fc1, yshift=-0.2cm] {\scriptsize Unified Risk Index $\in [0,1]$};
+    \node (fc1) [draw, rectangle, fill=blue!20, below of=concat, yshift=-0.3cm, minimum width=6.0cm, minimum height=0.5cm] {\small Fully Connected Layer (ReLU)};
+    \node (output) [draw, rectangle, fill=red!20, below of=fc1, yshift=-0.3cm] {\small Unified Risk Index $\in [0,1]$};
 
     % Connections
-    \draw [arrow] (tab.south) -- ++(0,-0.3) -| (concat.north);
-    \draw [arrow] (ecg.south) -- ++(0,-0.3) -| (concat.north);
+    \draw [arrow] (tab.south) -- ++(0,-0.4) -| (concat.north);
+    \draw [arrow] (ecg.south) -- ++(0,-0.4) -| (concat.north);
     \draw [arrow] (cxr.south) -- (concat.north);
-    \draw [arrow] (echo.south) -- ++(0,-0.3) -| (concat.north);
-    \draw [arrow] (nlp.south) -- ++(0,-0.3) -| (concat.north);
+    \draw [arrow] (echo.south) -- ++(0,-0.4) -| (concat.north);
+    \draw [arrow] (nlp.south) -- ++(0,-0.4) -| (concat.north);
     \draw [arrow] (concat) -- (fc1);
     \draw [arrow] (fc1) -- (output);
 \end{tikzpicture}
@@ -151,6 +151,7 @@ Table~\ref{tab:metrics} compares our proposed workstation against the baseline s
 \centering
 \caption{Classification Performance Metrics Across Model Configurations}
 \label{tab:metrics}
+\vspace{0.1in}
 \begin{tabular}{lccccc}
 \toprule
 \textbf{Model Configuration} & \textbf{Acc} & \textbf{Sens} & \textbf{Prec} & \textbf{F1} & \textbf{AUC} \\
@@ -170,6 +171,7 @@ To evaluate the individual contributions of each clinical modality, we conducted
 \centering
 \caption{Ablation Analysis of Individual Modalities}
 \label{tab:ablation}
+\vspace{0.1in}
 \begin{tabular}{lc}
 \toprule
 \textbf{Modality Removed} & \textbf{Accuracy Drop} \\
@@ -185,7 +187,7 @@ Remove Clinical Notes (BioBERT) & -1.9\% \\
 
 The ablation study highlights that removing Echocardiography leads to the largest drop in accuracy (-3.8\%). This confirms that spatiotemporal ultrasound dynamics contain critical diagnostic information regarding heart muscle motion and valve functions that other modalities cannot capture.
 
-\section{Security & Cryptographic Compliance}
+\section{Security \& Cryptographic Compliance}
 Due to the integration of sensitive patient records, the workstation uses a local HIPAA-compliant security layer.
 All inputs, tabular parameters, and outputs are compiled into a JSON string and encrypted using **AES-256 (Advanced Encryption Standard) in GCM (Galois/Counter Mode)**.
 Let $M$ represent the plaintext patient data. The ciphertext $C$ and authentication tag $T_{\text{auth}}$ are generated using:
@@ -203,7 +205,7 @@ Relying on single-modal models for complex cardiovascular risk triage creates da
 \bibitem{ecg} N. Strodthoff et al., ``Deep learning for ECG analysis on PTB-XL,'' \textit{Scientific Data}, vol. 7, no. 1, pp. 1--15, 2020.
 \bibitem{cxr} J. P. Cohen et al., ``TorchXRayVision: An open source library for chest X-ray models,'' in \textit{Proceedings of MIDL}, 2020.
 \bibitem{biobert} J. Lee et al., ``BioBERT: a pre-trained biomedical language representation model,'' \textit{Bioinformatics}, vol. 36, no. 4, pp. 1234--1240, 2020.
-\bibitem{echo1} J. Ostrogna et al., ``Spatiotemporal convolutional neural networks for automated echocardiography segmentation and ejection fraction estimation,'' \textit{Medical Image Analysis}, vol. 68, p. 101890, 2021.
+\bibitem{echo1} J. Ostrogna et al., ``Spatiotemporal convolutional neural networks for automated echocardiography segmentation,'' \textit{Medical Image Analysis}, vol. 68, p. 101890, 2021.
 \bibitem{echo2} A. Madani et al., ``Fast and accurate view classification of echocardiograms using deep learning,'' \textit{NPJ Digital Medicine}, vol. 1, no. 1, pp. 1--8, 2018.
 \bibitem{multimodal1} T. Baltru\v{s}aitis, C. Ahuja, and L. P. Morency, ``Multimodal machine learning: A survey and taxonomy,'' \textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, vol. 41, no. 2, pp. 423--443, 2018.
 \bibitem{multimodal2} W. Featherstone et al., ``Late fusion neural adapters for heterogeneous electronic health record integration,'' \textit{Journal of Biomedical Informatics}, vol. 114, p. 103672, 2021.
