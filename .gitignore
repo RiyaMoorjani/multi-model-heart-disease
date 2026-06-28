@@ -1,0 +1,33 @@
+# Exclude folders not used by the workstation
+EasyOCR-master/
+dynamic-master/
+Figure.pptx
+torchxrayvision-main/torchxrayvision-main/docs/
+torchxrayvision-main/torchxrayvision-main/tests/
+
+# Exclude large training outputs and dataset files
+**/*.npy
+!real_sample_ecg.npy
+**/*.csv.gz
+**/*.tgz
+**/*.zip
+**/*.png
+!real_sample_xray.png
+**/*.mp4
+**/*.gif
+
+# Exclude python cache and environment files
+__pycache__/
+**/__pycache__/
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+.vscode/
+.idea/
+*.pyc
+*.pyo
+*.pyd
+
+# Exclude build and egg-info directories
+build/
+dist/
+*.egg-info/
