@@ -455,27 +455,53 @@ with tabs[0]:
                 """, unsafe_allow_html=True)
             
         with res_col2:
-            st.write("**Local SHAP Feature Contribution**")
+            feature_display_names = [
+                'Age', 'Gender', 'Chest Pain', 'Resting BP', 'Cholesterol', 'Fasting BS',
+                'Rest ECG', 'Max HR', 'Ex Angina', 'ST Depression', 'ST Slope', 'Fluoroscopy', 'Thalassemia'
+            ]
+            
+            contributions = None
+            chart_title = "Local SHAP Feature Contribution"
+            is_shap = False
+            
             if st.session_state.shap_values is not None:
-                # Plot SHAP bar plot with clinical branding
+                try:
+                    contributions = st.session_state.shap_values.values[0]
+                    chart_title = "Local SHAP Feature Contribution"
+                    is_shap = True
+                except Exception as e:
+                    print(f"Error extracting SHAP values: {e}")
+                    
+            if contributions is None and tabular_model is not None:
+                try:
+                    # Fallback to model feature importances
+                    contributions = tabular_model.feature_importances_
+                    chart_title = "Global Feature Importance (XGBoost Fallback)"
+                    is_shap = False
+                except Exception as e:
+                    print(f"Error extracting feature importances: {e}")
+            
+            st.write(f"**{chart_title}**")
+            
+            if contributions is not None and len(contributions) == len(feature_display_names):
                 fig, ax = plt.subplots(figsize=(6, 3.4), facecolor='none')
                 ax.set_facecolor('none')
                 
-                feature_display_names = [
-                    'Age', 'Gender', 'Chest Pain', 'Resting BP', 'Cholesterol', 'Fasting BS',
-                    'Rest ECG', 'Max HR', 'Ex Angina', 'ST Depression', 'ST Slope', 'Fluoroscopy', 'Thalassemia'
-                ]
-                
-                contributions = st.session_state.shap_values.values[0]
                 sorted_idx = np.argsort(np.abs(contributions))
                 y_pos = np.arange(len(feature_display_names))
                 
-                # Clinical red for positive impact (risk elevation) and clean sky-blue for negative impact (risk reduction)
-                colors = ['#991b1b' if c > 0 else '#0369a1' for c in contributions[sorted_idx]]
+                # Clinical red for positive/high impact, blue/navy for global importance
+                if is_shap:
+                    colors = ['#991b1b' if c > 0 else '#0369a1' for c in contributions[sorted_idx]]
+                    xlabel = "SHAP Contribution (Model Impact Value)"
+                else:
+                    colors = ['#0c4a6e' for _ in contributions] # Deep blue for feature importances
+                    xlabel = "Relative Feature Importance Score"
+                    
                 ax.barh(y_pos, contributions[sorted_idx], color=colors, height=0.55)
                 ax.set_yticks(y_pos)
                 ax.set_yticklabels([feature_display_names[i] for i in sorted_idx], fontsize=8, color='#334155', fontfamily='sans-serif')
-                ax.set_xlabel("SHAP Contribution (Model Impact Value)", fontsize=8, color='#475569', fontfamily='sans-serif')
+                ax.set_xlabel(xlabel, fontsize=8, color='#475569', fontfamily='sans-serif')
                 
                 # Styling axes
                 ax.spines['top'].set_visible(False)
@@ -489,7 +515,7 @@ with tabs[0]:
                 st.pyplot(fig, transparent=True)
                 plt.close(fig)
             else:
-                st.write("SHAP values unavailable.")
+                st.write("Feature contribution values unavailable. Please calibrate the model in Tab 5.")
                 
         # LLM Clinical Reasoning Report
         st.markdown("### Algorithmic Reasoning & Explanation")
