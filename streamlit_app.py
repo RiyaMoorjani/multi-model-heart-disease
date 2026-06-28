@@ -582,7 +582,7 @@ with tabs[0]:
                     active_model = None
                     
                     from huggingface_hub import InferenceClient
-                    client = InferenceClient(token=hf_token)
+                    client = InferenceClient(token=hf_token, timeout=15)
                     
                     for model_id in models_to_try:
                         try:
@@ -593,8 +593,7 @@ with tabs[0]:
                                 formatted_prompt,
                                 model=model_id,
                                 max_new_tokens=250,
-                                temperature=0.2,
-                                timeout=15
+                                temperature=0.2
                             )
                             if response_text:
                                 bot_response = response_text.strip()
